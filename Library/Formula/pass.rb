@@ -5,6 +5,8 @@ class Pass < Formula
   url 'http://git.zx2c4.com/password-store/snapshot/password-store-1.6.3.tar.xz'
   sha256 'd419d40aa165c1f893e994dd706733374a9db8cf5314124702a061e70e0340f7'
 
+  option "use-gnupg1", "Use gpg1 on behalf of gpg2"
+
   bottle do
     cellar :any
     sha1 "c7c430873e8272725a8f0cab1b9c50371d3bf9e4" => :mavericks
@@ -17,7 +19,12 @@ class Pass < Formula
   depends_on 'pwgen'
   depends_on 'tree'
   depends_on 'gnu-getopt'
-  depends_on 'gnupg2'
+
+  if build.include? "use-gnupg1"
+    depends_on 'gnupg'
+  else
+    depends_on 'gnupg2'
+  end
 
   def install
     system "make DESTDIR=#{prefix} PREFIX=/ install"
